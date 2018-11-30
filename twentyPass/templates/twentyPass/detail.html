@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+{% extends 'twentyPass/index.html' %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>스무고개 문제</title>
+    {% block script%}
+    <script type="text/javascript">
+      i = 0
+      function createDIV() {
+            var answer = [];
+            {% for i in q %}
+              answer.push("{{i}}");
+            {% endfor %}
+
+            if(i <= 20){
+              var newDIV_p = document.getElementById("hint");
+              var newDIV  = document.createElement('div');
+              newDIV.innerHTML = "힌트는 '" + answer[i] +"'입니다. <p><hr>";
+              newDIV.setAttribute("class","form-control");
+              newDIV.setAttribute("id","hintPd");
+              if(i == 20){
+                newDIV.innerHTML = "끝났습니다. <p><hr>";
+                alert('정답은 {{twentyPass.answer}}입니다.')
+              }
+            }
+            newDIV_p.appendChild(newDIV);
+
+            i++;
+          }
+        function CK(){
+          var ckAnswer = document.getElementById('ck').value
+
+          if (ckAnswer == "{{twentyPass.answer}}") {
+            alert('정답 입니다. \n 홈으로 돌아갑니다.');
+            location.href = "{% url 'index' %}"
+          }
+          else if( chAnswer == ""){
+            alert('정답을 작성하지 않으셨습니다.')
+          }
+          else{
+            alert('오답 입니다.');
+            document.getElementById('ck').value = "";
+          }
+        }
+    </script>
+    {% endblock %}
+    {% block style %}
+      <style media="screen">
+        #hintPd{
+          margin-top: 15px;
+        }
+      </style>
+    {% endblock %}
+  </head>
+  {% block content %}
+  <body id="parent">
+    <div class="pd" id="hint">
+      <h1>제목 : {{twentyPass.title}}</h1>
+      <hr>
+      <input class="form-control" type="text" id="ck" placeholder="정답 입력!!"><br>
+      <button type="button" onclick="javascript:CK()" class="btn btn-success">정답제출</button>
+      <button onclick="javascript:createDIV()" class="btn btn-primary">힌트보기</button><br><br><br>
+  </body>
+  {% endblock%}
+</html>
